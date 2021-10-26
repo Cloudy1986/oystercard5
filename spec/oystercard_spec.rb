@@ -72,5 +72,11 @@ describe Oystercard do
         expect(oystercard.in_journey?).to be false
       end
     end
+
+    it 'deducts 1 from balance' do
+      oystercard.top_up(10)
+      expect { oystercard.touch_out }.to change { oystercard.balance }.by(-1)
+    end
+
   end
 end
