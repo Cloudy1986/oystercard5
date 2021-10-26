@@ -47,6 +47,7 @@ describe Oystercard do
 
     context 'when oystercard is touched in' do
       it 'is true' do
+        oystercard.top_up(50)
         oystercard.touch_in
         expect(oystercard.in_journey?).to be true
       end
@@ -56,7 +57,7 @@ describe Oystercard do
       minimum_balance = Oystercard::MINIMUM_BALANCE
       expect {
         oystercard.touch_in
-      }.to raise_error 'Insufficient balance. Min. balance is 1'
+      }.to raise_error "Insufficient balance. Min. balance is #{minimum_balance}"
     end
   end
 
@@ -65,6 +66,7 @@ describe Oystercard do
 
     context 'when oystercard is touched out' do
       it 'is false' do
+        oystercard.top_up(50)
         oystercard.touch_in
         oystercard.touch_out
         expect(oystercard.in_journey?).to be false
