@@ -25,14 +25,15 @@ describe Oystercard do
     end
   end
 
-  describe '#deduct' do
-    it { is_expected.to respond_to(:deduct).with(1).argument }
+  #CODED OUT DEDUCT METHOD ----> DEDUCT METHOD HAD BEEN MADE PRIVATE SO WE DO NOT NEED TO TEST THIS. (Questions to ask: should we test private methods? or should the tests be refactored to make them work)
+  # describe '#deduct' do
+  #   it { is_expected.to respond_to(:deduct).with(1).argument }
 
-    it 'expects an amount to be deducted from an oystercard' do
-      oystercard.top_up(50)
-      expect { oystercard.deduct 10 }.to change { oystercard.balance }.by(-10)
-    end
-  end
+  #   it 'expects an amount to be deducted from an oystercard' do
+  #     oystercard.top_up(50)
+  #     expect { oystercard.deduct 10 }.to change { oystercard.balance }.by(-10)
+  #   end
+  # end
 
   describe '#in_journey?' do
     context 'when oystercard is initialised it' do
@@ -74,9 +75,11 @@ describe Oystercard do
     end
 
     it 'deducts 1 from balance' do
+      minimum_fare = Oystercard::MINIMUM_FARE
       oystercard.top_up(10)
-      expect { oystercard.touch_out }.to change { oystercard.balance }.by(-1)
+      expect { oystercard.touch_out }.to change { oystercard.balance }.by(
+        -minimum_fare,
+      )
     end
-
   end
 end
