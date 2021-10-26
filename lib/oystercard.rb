@@ -4,12 +4,11 @@ class Oystercard
 
   def initialize
     @balance = 0
+    @journey_status = false
   end
 
   def top_up(amount)
-    if (@balance + amount) > MAXIMUM_BALANCE
-      fail "Max. balance #{MAXIMUM_BALANCE} exceeded"
-    end
+    fail "Max. balance #{MAXIMUM_BALANCE} exceeded" if (@balance + amount) > MAXIMUM_BALANCE
     @balance += amount
   end
 
@@ -18,6 +17,14 @@ class Oystercard
   end
 
   def in_journey?
-    false
+    @journey_status
+  end
+
+  def touch_in
+    @journey_status = true
+  end
+
+  def touch_out
+    @journey_status = false
   end
 end
