@@ -19,7 +19,9 @@ describe Oystercard do
     it 'expects to raise an error if balance exceeds maximum balance' do
       maximum_balance = Oystercard::MAXIMUM_BALANCE
       oystercard.top_up(maximum_balance)
-      expect { oystercard.top_up 1 }.to raise_error "Max. balance #{maximum_balance} exceeded"
+      expect {
+        oystercard.top_up 1
+      }.to raise_error "Max. balance #{maximum_balance} exceeded"
     end
   end
 
@@ -48,6 +50,13 @@ describe Oystercard do
         oystercard.touch_in
         expect(oystercard.in_journey?).to be true
       end
+    end
+
+    it 'expects to raise an error if balance is below minimum balance' do
+      minimum_balance = Oystercard::MINIMUM_BALANCE
+      expect {
+        oystercard.touch_in
+      }.to raise_error 'Insufficient balance. Min. balance is 1'
     end
   end
 
