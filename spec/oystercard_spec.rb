@@ -31,4 +31,10 @@ describe Oystercard do
       expect { oystercard.deduct 10 }.to change { oystercard.balance }.by(-10)
     end
   end
+
+  describe '#in_journey?' do
+    it 'returns true or false' do
+      expect(oystercard.in_journey?)
+    end
+  end
 end
