@@ -6,35 +6,39 @@ class Oystercard
 
   def initialize
     @balance = 0
-    @journey_status = false
+    @in_journey = false
   end
 
   def top_up(amount)
-    if (@balance + amount) > MAXIMUM_BALANCE
-      fail "Max. balance #{MAXIMUM_BALANCE} exceeded"
-    end
+    fail "Max. balance #{MAXIMUM_BALANCE} exceeded" if over_max?(amount)
     @balance += amount
   end
 
   def in_journey?
-    @journey_status
+    @in_journey
   end
 
   def touch_in
-    if @balance < MINIMUM_BALANCE
-      fail "Insufficient balance. Min. balance is #{MINIMUM_BALANCE}"
-    end
-    @journey_status = true
+    fail "Insufficient balance. Min. balance is #{MINIMUM_BALANCE}" if less_than_min?
+    @in_journey = true
   end
 
   def touch_out
     deduct(MINIMUM_FARE)
-    @journey_status = false
+    @in_journey = false
   end
-end
 
-private
+  private
 
-def deduct(amount)
-  @balance -= amount
+  def less_than_min?
+    @balance < MINIMUM_BALANCE
+  end
+
+  def over_max?(amount)
+    (@balance + amount) > MAXIMUM_BALANCE
+  end
+
+  def deduct(amount)
+    @balance -= amount
+  end
 end
