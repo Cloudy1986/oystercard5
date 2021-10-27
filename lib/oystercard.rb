@@ -6,7 +6,7 @@ class Oystercard
 
   def initialize
     @balance = 0
-    @in_journey = false
+    #@in_journey = false # refactored to remove in_journey
     @entry_station = nil
   end
 
@@ -16,18 +16,19 @@ class Oystercard
   end
 
   def in_journey?
-    @in_journey
+    @entry_station.nil? ? false : true
   end
 
   def touch_in(station)
     fail "Insufficient balance. Min. balance is #{MINIMUM_BALANCE}" if less_than_min?
-    @in_journey = true
+    #@in_journey = true # refactored to remove in_journey
     @entry_station = station
   end
 
   def touch_out
     deduct(MINIMUM_FARE)
-    @in_journey = false
+    #@in_journey = false # refactored to remove in_journey
+    @entry_station = nil
   end
 
   private

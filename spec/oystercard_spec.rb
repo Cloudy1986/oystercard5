@@ -2,6 +2,7 @@ require './lib/oystercard'
 
 describe Oystercard do
   let(:oystercard) { Oystercard.new }
+  let(:station) { double :station }
 
   it { is_expected.to respond_to(:top_up).with(1).argument }
   it { is_expected.to respond_to(:touch_in) }
@@ -9,7 +10,7 @@ describe Oystercard do
 
   def top_and_touch
     oystercard.top_up(50)
-    oystercard.touch_in("waterloo")
+    oystercard.touch_in(:station)
   end
 
   describe '#balance' do
@@ -48,12 +49,12 @@ describe Oystercard do
 
     it 'expects to raise an error if balance is below minimum balance' do
       minimum_balance = Oystercard::MINIMUM_BALANCE
-      expect { oystercard.touch_in("waterloo") }.to raise_error "Insufficient balance. Min. balance is #{minimum_balance}"
+      expect { oystercard.touch_in(:station) }.to raise_error "Insufficient balance. Min. balance is #{minimum_balance}"
     end
 
     it 'register an entry_station on touch_in' do
       top_and_touch
-      expect(oystercard.entry_station).to eq "waterloo"
+      expect(oystercard.entry_station).to eq :station
     end
 
   end
@@ -71,6 +72,12 @@ describe Oystercard do
       minimum_fare = Oystercard::MINIMUM_FARE
       oystercard.top_up(10)
       expect { oystercard.touch_out }.to change { oystercard.balance }.by(-minimum_fare)
+    end
+
+    it 'resets entry_station to nil on touch_out' do
+      top_and_touch
+      oystercard.touch_out
+      expect(oystercard.entry_station).to eq nil
     end
   end
 end
