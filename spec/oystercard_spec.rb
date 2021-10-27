@@ -3,6 +3,7 @@ require './lib/oystercard'
 describe Oystercard do
   let(:oystercard) { Oystercard.new }
   let(:station) { double :station }
+  let(:journey){ {:journey_entry => :station, :journey_exit => :station} }
 
   it { is_expected.to respond_to(:top_up).with(1).argument }
   it { is_expected.to respond_to(:touch_in) }
@@ -21,7 +22,7 @@ describe Oystercard do
 
   describe '#journey_history' do
     it 'there be no journey history on initiation' do
-      expect(oystercard.journey_history).to eq([])
+      expect(oystercard.journey_history).to be_empty
     end
   end
 
@@ -88,7 +89,9 @@ describe Oystercard do
 
     it 'adds the full journey as a hash to @journey_history' do
       top_and_touch
-      expect {oystercard.touch_out(:station) }.to change { oystercard.journey_history.count }.by(1)
+      oystercard.touch_out(:station)
+      expect(oystercard.journey_history).to include journey
+      #expect {oystercard.touch_out(:station) }.to change { oystercard.journey_history.count }.by(1)
     end
   end
 end
