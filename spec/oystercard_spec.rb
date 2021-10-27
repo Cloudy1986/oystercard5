@@ -19,6 +19,12 @@ describe Oystercard do
     end
   end
 
+  describe '#journey_history' do
+    it 'there be no journey history on initiation' do
+      expect(oystercard.journey_history).to eq([])
+    end
+  end
+
   describe '#top_up' do
     it 'expects to be able to add money to a card' do
       expect { oystercard.top_up 10 }.to change { oystercard.balance }.by(10)
@@ -63,7 +69,7 @@ describe Oystercard do
     context 'when oystercard is touched out' do
       it 'is false' do
         top_and_touch
-        oystercard.touch_out
+        oystercard.touch_out(:station)
         expect(oystercard.in_journey?).to be false
       end
     end
@@ -71,13 +77,18 @@ describe Oystercard do
     it 'deducts 1 from balance' do
       minimum_fare = Oystercard::MINIMUM_FARE
       oystercard.top_up(10)
-      expect { oystercard.touch_out }.to change { oystercard.balance }.by(-minimum_fare)
+      expect { oystercard.touch_out(:station) }.to change { oystercard.balance }.by(-minimum_fare)
     end
 
     it 'resets entry_station to nil on touch_out' do
       top_and_touch
-      oystercard.touch_out
+      oystercard.touch_out(:station)
       expect(oystercard.entry_station).to eq nil
+    end
+
+    it 'adds the full journey as a hash to @journey_history' do
+      top_and_touch
+      expect {oystercard.touch_out(:station) }.to change { oystercard.journey_history.count }.by(1)
     end
   end
 end
