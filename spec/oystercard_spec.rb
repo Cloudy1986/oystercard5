@@ -7,6 +7,11 @@ describe Oystercard do
   it { is_expected.to respond_to(:touch_in) }
   it { is_expected.to respond_to(:touch_out) }
 
+  def top_and_touch
+    oystercard.top_up(50)
+    oystercard.touch_in("waterloo")
+  end
+
   describe '#balance' do
     it 'expects there to be a balance on the card' do
       expect(oystercard.balance).to eq(0)
@@ -36,21 +41,19 @@ describe Oystercard do
   describe '#touch_in' do
     context 'when oystercard is touched in' do
       it 'is true' do
-        oystercard.top_up(50)
-        oystercard.touch_in
+        top_and_touch
         expect(oystercard.in_journey?).to be true
       end
     end
 
     it 'expects to raise an error if balance is below minimum balance' do
       minimum_balance = Oystercard::MINIMUM_BALANCE
-      expect { oystercard.touch_in }.to raise_error "Insufficient balance. Min. balance is #{minimum_balance}"
+      expect { oystercard.touch_in("waterloo") }.to raise_error "Insufficient balance. Min. balance is #{minimum_balance}"
     end
 
     it 'register an entry_station on touch_in' do
-      oystercard.top_up(50)
-      oystercard.touch_in
-      #expect(oystercard.entry_station).to eq ?
+      top_and_touch
+      expect(oystercard.entry_station).to eq "waterloo"
     end
 
   end
@@ -58,8 +61,7 @@ describe Oystercard do
   describe '#touch_out' do
     context 'when oystercard is touched out' do
       it 'is false' do
-        oystercard.top_up(50)
-        oystercard.touch_in
+        top_and_touch
         oystercard.touch_out
         expect(oystercard.in_journey?).to be false
       end
