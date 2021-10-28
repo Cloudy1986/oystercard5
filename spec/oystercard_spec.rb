@@ -87,6 +87,12 @@ describe Oystercard do
       expect(oystercard.entry_station).to eq nil
     end
 
+    it 'resets exit_station to nil on touch_out' do
+      top_and_touch
+      oystercard.touch_out(:station)
+      expect(oystercard.exit_station).to eq nil
+    end
+
     it 'adds the full journey as a hash to @journey_history' do
       top_and_touch
       oystercard.touch_out(:station)
