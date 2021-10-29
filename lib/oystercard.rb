@@ -6,7 +6,7 @@ class Oystercard
 
   def initialize
     @balance = 0
-    @entry_station = nil
+    # @entry_station = nil
     @exit_station = nil
     @journey_history = [] #move to journey class
   end
@@ -16,9 +16,9 @@ class Oystercard
     @balance += amount
   end
 
-  def in_journey? #move to journey class
-    @entry_station.nil? ? false : true
-  end
+  # def in_journey? #move to journey class
+  #   @entry_station.nil? ? false : true
+  # end
 
   def touch_in(station)
     fail "Insufficient balance. Min. balance is #{MINIMUM_BALANCE}" if less_than_min?
